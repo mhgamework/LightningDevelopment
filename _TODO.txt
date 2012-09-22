@@ -1,0 +1,6 @@
+Use GITSharp http://www.eqqon.com/index.php/GitSharp
+
+Write program that uses git fetch and self-updates from the git repository.
+Write a watcher that automatically commits and pushed the LightningDevelopment folders.
+Add utility that gives a quicklauncher with buttons or a list of actions, context sensitive (like commit etc).
+Maybe add machine learning?
