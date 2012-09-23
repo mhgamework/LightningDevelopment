@@ -4,3 +4,4 @@ Write program that uses git fetch and self-updates from the git repository.
 Write a watcher that automatically commits and pushed the LightningDevelopment folders.
 Add utility that gives a quicklauncher with buttons or a list of actions, context sensitive (like commit etc).
 Maybe add machine learning?
+Watch user activity (eg using visual studio for 2 mins) and then ask for toggle updates and such.
