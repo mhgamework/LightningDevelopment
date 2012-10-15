@@ -1,0 +1,6 @@
+
+/src/_ReSharper.LightningDevelopment/*
+bin/
+obj/
+*.user
+*.suo
