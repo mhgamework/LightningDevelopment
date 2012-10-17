@@ -49,11 +49,11 @@ namespace LightningDevelopment
             Deactivated += new EventHandler(MainWindow_Deactivated);
             ResizeMode = System.Windows.ResizeMode.NoResize;
 
-            
+
 
         }
 
-        
+
 
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
@@ -83,8 +83,8 @@ namespace LightningDevelopment
             //and set up a form closed event and call
 
             Hide();
-            
-            
+
+
 
         }
 
@@ -108,7 +108,7 @@ namespace LightningDevelopment
                     foreach (InternetExplorer item in windows)
                     {
                         if (item.HWND != foreground.ToInt32()) continue;
-                        Context.WorkingDir =  item.LocationURL.Replace("file:///","");
+                        Context.WorkingDir = new Uri(item.LocationURL).LocalPath;
                         Context.ActiveFile = item.Document.FocusedItem.Path;
                     }
                 }

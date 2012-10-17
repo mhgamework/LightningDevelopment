@@ -59,6 +59,7 @@
     <Compile Include="Tools\BuildServer.cs" />
     <Compile Include="Tools\CodeMetrics.cs" />
     <Compile Include="Tools\Commit.cs" />
+    <Compile Include="Exit.cs" />
     <Compile Include="Tools\Dir.cs" />
     <Compile Include="Tools\Log.cs" />
     <Compile Include="Tools\Test.cs" />
