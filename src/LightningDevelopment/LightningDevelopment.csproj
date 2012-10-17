@@ -66,9 +66,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Context.cs" />
-    <Compile Include="IDispatch.cs" />
+    <Compile Include="DependencyInjection\DefaultBindingMethodAttribute.cs" />
+    <Compile Include="DependencyInjection\DependencyBindings.cs" />
+    <Compile Include="DependencyInjection\DI.cs" />
+    <Compile Include="HotkeyBinder.cs" />
+    <Compile Include="IPlugin.cs" />
     <Compile Include="IQuickAction.cs" />
+    <Compile Include="LightningDevelopmentHandle.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -103,15 +107,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="SHDocVw">
-      <Guid>{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>1</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <Resource Include="DependencyInjection\_doc.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

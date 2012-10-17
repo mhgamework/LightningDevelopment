@@ -4,22 +4,23 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using LightningDevelopment;
+using Modules.Git;
 
 namespace Tools.Tools
 {
-    public class Log : IQuickAction
+    public class Commit : IQuickAction
     {
         public string Command
         {
-            get { return "log"; }
+            get { return "commit"; }
         }
 
         public void Execute()
         {
-            if (!Directory.Exists(Context.WorkingDir))
-                return;
-            TortoiseProc.Do(TortoiseProc.Command.Log, Context.WorkingDir);
+            var gitRoot = GitPlugin.GitRoot.Get();
+            if (gitRoot == null) return;
+
+            TortoiseProc.Do(TortoiseProc.Command.Commit, gitRoot);
         }
     }
 }
-

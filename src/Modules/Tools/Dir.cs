@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tools.Tools
 {
-    public class Dir : ITool
+    public class Dir 
     {
         public void Execute()
         {

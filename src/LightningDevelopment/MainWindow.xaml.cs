@@ -16,7 +16,6 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SHDocVw;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using KeyEventHandler = System.Windows.Input.KeyEventHandler;
 using MessageBox = System.Windows.MessageBox;
@@ -28,8 +27,7 @@ namespace LightningDevelopment
     /// </summary>
     public partial class MainWindow : Window
     {
-        [DllImport("user32.dll")]
-        private static extern IntPtr GetForegroundWindow();
+
 
         public MainWindow()
         {
@@ -68,25 +66,32 @@ namespace LightningDevelopment
                 throw;
             }
 
+
+
             //actions["test"].Execute();
 
-            var t = new Thread(fetchExplorerInfo);
-            t.Start();
 
             HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
             source.AddHook(WndProc);
 
 
-            //put this code in the onload method of your form
-            unSetHotKey();
-            setHotKey(KeyModifiers.Control | KeyModifiers.Shift, Keys.G);
-            //and set up a form closed event and call
+            hotkeyBinder = new HotkeyBinder(new WindowInteropHelper(this).Handle);
+            hotkeyBinder.unSetHotKey();
+            hotkeyBinder.setHotKey(HotkeyBinder.KeyModifiers.Control | HotkeyBinder.KeyModifiers.Shift, Keys.G);
+            hotkeyBinder.HotkeyFired += delegate
+                                        {
+                                            SetForegroundWindow(new WindowInteropHelper(this).Handle);
+                                            Show();
+                                            textBox1.Focus();
+                                        };
 
             Hide();
 
 
 
         }
+
+        private
 
         void MainWindow_Deactivated(object sender, EventArgs e)
         {
@@ -97,45 +102,12 @@ namespace LightningDevelopment
             if (e.Key == Key.Escape)
                 Hide();
         }
-        private void fetchExplorerInfo()
-        {
-            var windows = new ShellWindows();
-            while (true)
-            {
-                try
-                {
-                    var foreground = GetForegroundWindow();
-                    foreach (InternetExplorer item in windows)
-                    {
-                        if (item.HWND != foreground.ToInt32()) continue;
-                        Context.WorkingDir = new Uri(item.LocationURL).LocalPath;
-                        Context.ActiveFile = item.Document.FocusedItem.Path;
-                    }
-                }
-                catch (Exception)
-                {
-                }
 
+        private HotkeyBinder hotkeyBinder;
 
-                System.Threading.Thread.Sleep(200);
-            }
-        }
-        public IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
+        private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
-            switch (msg)
-            {
-                case WM_HOTKEY:
-                    Keys key = (Keys)(((int)lParam >> 16) & 0xFFFF);
-                    KeyModifiers modifier = (KeyModifiers)((int)lParam & 0xFFFF);
-                    //put your on hotkey code here
-                    //MessageBox.Show("HotKey Pressed :" + modifier.ToString() + " " + key.ToString());
-                    //end hotkey code
-                    SetForegroundWindow(new WindowInteropHelper(this).Handle);
-                    Show();
-                    textBox1.Focus();
-                    handled = true;
-                    break;
-            }
+            hotkeyBinder.WndProc(hwnd, msg, wParam, lParam, ref handled);
             return IntPtr.Zero;
         }
 
@@ -143,38 +115,9 @@ namespace LightningDevelopment
         private static extern bool
         SetForegroundWindow(IntPtr hWnd);
 
-        //API Imports
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool RegisterHotKey(
-            IntPtr hWnd, // handle to window    
-            int id, // hot key identifier    
-            KeyModifiers fsModifiers, // key-modifier options    
-            Keys vk    // virtual-key code    
-            );
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool UnregisterHotKey(
-            IntPtr hWnd, // handle to window    
-            int id      // hot key identifier    
-            );
-        const int HOTKEY_ID = 31197; //Any number to use to identify the hotkey instance
-        public enum KeyModifiers        //enum to call 3rd parameter of RegisterHotKey easily
-        {
-            None = 0,
-            Alt = 1,
-            Control = 2,
-            Shift = 4,
-            Windows = 8
-        }
+       
 
-        public bool setHotKey(KeyModifiers Kmds, Keys key)
-        {
-            return RegisterHotKey(new WindowInteropHelper(this).Handle, HOTKEY_ID, Kmds, key);
-        }
-        public bool unSetHotKey()
-        {
-            return UnregisterHotKey(new WindowInteropHelper(this).Handle, HOTKEY_ID);
-        }
-        const int WM_HOTKEY = 0x0312;//magic hotkey message identifier
+     
 
 
 
@@ -200,17 +143,30 @@ namespace LightningDevelopment
 
             var actionTypes = listQuickActions(modulesAssembly);
 
+            var handle = new LightningDevelopmentHandle();
+
+            foreach (var pluginType in listPlugins(modulesAssembly))
+            {
+                IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginType);
+                plugin.Initialize(handle);
+            }
+
             foreach (var type in actionTypes)
             {
                 var obj = (IQuickAction)Activator.CreateInstance(type);
                 actions.Add(obj.Command, obj);
             }
 
+
         }
 
         private IEnumerable<Type> listQuickActions(Assembly ass)
         {
             return ass.GetTypes().Where(t => t.GetInterfaces().Where(i => i == typeof(IQuickAction)).Count() != 0);
+        }
+        private IEnumerable<Type> listPlugins(Assembly ass)
+        {
+            return ass.GetTypes().Where(t => t.GetInterfaces().Where(i => i == typeof(IPlugin)).Count() != 0);
         }
     }
 }

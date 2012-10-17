@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Tools.Tools
 {
-    public class BuildServer : ITool
+    public class BuildServer 
     {
         public void Execute()
         {

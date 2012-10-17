@@ -3,18 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using LightningDevelopment;
+using Modules.Core;
 
 namespace Tools.Tools
 {
-    public class CodeMetrics : ITool
+    public class CodeMetrics : IQuickAction
     {
+        public string Command
+        {
+            get { return "codemetrics"; }
+        }
+
         public void Execute()
         {
-
-
             var lineCount = 0;
             var fileCount = 0;
-            foreach (var file in Directory.EnumerateFiles(Directory.GetParent(Environment.CurrentDirectory).FullName, "*.cs", SearchOption.AllDirectories))
+            foreach (var file in Directory.EnumerateFiles(Directory.GetParent(CorePlugin.WorkingDirectory.Get()).FullName, "*.cs", SearchOption.AllDirectories))
             {
                 if (file.Contains("Deprecated")) continue;
                 if (file.Contains("_Libraries")) continue;

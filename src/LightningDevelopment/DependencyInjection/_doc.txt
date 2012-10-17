@@ -1,0 +1,5 @@
+﻿COPIED FROM THEWIZARDS!!!! This namespaces provides Dependency Injection functionality.
+The static access point is DI. It can be used to resolve interfaces to instances.
+A DependencyBindings object can be used to set the current bindings. This is a scoped-singleton pattern (service pattern) so these bindings can be swapped in runtime.
+
+Namespaces providing Interfaces that are meant for dependency injection are required to bind a default dependency :) ( is this actually posssible? )
