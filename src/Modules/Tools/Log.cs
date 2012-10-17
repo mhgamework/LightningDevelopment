@@ -1,15 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using LightningDevelopment;
 
 namespace Tools.Tools
 {
-    public class Log : ITool
+    public class Log : IQuickAction
     {
+        public string Command
+        {
+            get { return "log"; }
+        }
+
         public void Execute()
         {
-            TortoiseProc.Do(TortoiseProc.Command.Log, Config.TheWizardsRoot);
+            if (!Directory.Exists(Context.WorkingDir))
+                return;
+            TortoiseProc.Do(TortoiseProc.Command.Log, Context.WorkingDir);
         }
     }
 }
+
