@@ -48,13 +48,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
+    <Compile Include="CSRunner.cs" />
+    <Compile Include="IDispatch.cs" />
+    <Compile Include="ITool.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestQuickAction.cs" />
+    <Compile Include="Tools\Bash.cs" />
+    <Compile Include="Tools\BuildServer.cs" />
+    <Compile Include="Tools\CodeMetrics.cs" />
+    <Compile Include="Tools\Commit.cs" />
+    <Compile Include="Tools\Dir.cs" />
+    <Compile Include="Tools\Log.cs" />
+    <Compile Include="Tools\Test.cs" />
+    <Compile Include="TortoiseProc.cs" />
     <Compile Include="TWSourceToDokuWiki\DocUploader.cs" />
     <Compile Include="TWSourceToDokuWiki\FileHelper.cs" />
+    <Compile Include="TWSourceToDokuWiki\NamespaceElement.cs" />
     <Compile Include="TWSourceToDokuWiki\TWDokuWikiQuickAction.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="TWSourceToDokuWiki\_doc.txt" />
+    <Content Include="_doc.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

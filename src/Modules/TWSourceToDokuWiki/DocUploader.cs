@@ -13,6 +13,7 @@ namespace DocumentationHelper
     /// </summary>
     public class DocUploader
     {
+        private string TWDir = @"C:\_MHData\_Source\";
 
         public void UploadDocs()
         {
@@ -24,33 +25,19 @@ namespace DocumentationHelper
 
                 var docFiles = getDocFilesEnumerable("Gameplay")
                     .Union(getDocFilesEnumerable("NewModules"))
-                    .Union(getDocFilesEnumerable("ApplicationLogic"))
-                    .Union(getDocFilesEnumerable("DirectX11"))
+                    //.Union(getDocFilesEnumerable("ApplicationLogic"))
+                    //.Union(getDocFilesEnumerable("DirectX11"))
                     .Union(getDocFilesEnumerable("Common.Core"))
-                    .Union(getDocFilesEnumerable("NetworkiSng"))
-                    .Union(getDocFilesEnumerable("DocumentationHelper"))
-                    .Union(getDocFilesEnumerable("Tools"))
+                    .Union(getDocFilesEnumerable("Networking"))
+                    //.Union(getDocFilesEnumerable("DocumentationHelper"))
+                    //.Union(getDocFilesEnumerable("Tools"))
                     ;
 
                 try
                 {
                     string uploadRoot = "/wiki/data/pages/source";
 
-                    foreach (var doc in docFiles)
-                    {
-                        var dir = FileHelper.GetDirectory(doc.DocPath);
-                        string targetDir = uploadRoot + "/" + dir.Replace('\\', '/');
-                        targetDir = targetDir.ToLower();
-                        if (!ftp.DirectoryExists(targetDir))
-                            ftp.CreateDirectory(targetDir);
-                        ftp.SetCurrentDirectory(targetDir); /* change current directory */
-
-                        string tempStore = "build";
-
-
-                        ftp.PutFile(buildDocFile(doc), FileHelper.ExtractFilename(doc.DocPath.ToLower(), false)); /* upload c:\localfile.txt to the current ftp directory as file.txt */
-                        Console.WriteLine(doc);
-                    }
+                    //uploadBuildFolder(ftp, docFiles, uploadRoot);
                 }
                 catch (FtpException e)
                 {
@@ -60,15 +47,32 @@ namespace DocumentationHelper
             }
         }
 
+        private void uploadBuildFolder(FtpConnection ftp, string localFolder, string remoteFolder)
+        {
+            /*foreach (var doc in docFiles)
+            {
+                var dir = FileHelper.GetDirectory(doc.DocPath);
+                string targetDir = remoteFolder + "/" + dir.Replace('\\', '/');
+                targetDir = targetDir.ToLower();
+                if (!ftp.DirectoryExists(targetDir))
+                    ftp.CreateDirectory(targetDir);
+                ftp.SetCurrentDirectory(targetDir); // change current directory 
+
+                string tempStore = "build";
+
+
+                ftp.PutFile(buildDocFile(doc), FileHelper.ExtractFilename(doc.DocPath.ToLower(), false)); // upload c:\localfile.txt to the current ftp directory as file.txt //
+                Console.WriteLine(doc);
+            }*/
+        }
+
         private IEnumerable<Docfile> getDocFilesEnumerable(string projectName)
         {
-            string prefix = "../../../" + projectName;
+            string prefix = TWDir + projectName;
             foreach (var file in Directory.EnumerateFiles(prefix, "_doc.txt", SearchOption.AllDirectories))
             {
                 var docfile = new Docfile();
                 docfile.DocPath = createDocPathFromRelative(projectName + "\\" + file.Substring(prefix.Length + 1));
-
-
 
                 var originalPath = new FileInfo(file).FullName;
                 docfile.Localpath = originalPath;
