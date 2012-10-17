@@ -21,7 +21,7 @@ namespace MHGameWork
         /// <returns></returns>
         public static T Bind<T>() where T : class
         {
-            return CurrentBindings.GetBinding<T>();
+            return CurrentBindings.GetBinding(typeof(T)) as T;
         }
     }
 }

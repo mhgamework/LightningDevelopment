@@ -51,6 +51,7 @@
     <Compile Include="Config.cs" />
     <Compile Include="ContextModel\ContextualValue.cs" />
     <Compile Include="Core\CorePlugin.cs" />
+    <Compile Include="Core\FullFileSystemWatcher.cs" />
     <Compile Include="CSRunner.cs" />
     <Compile Include="Git\GitPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

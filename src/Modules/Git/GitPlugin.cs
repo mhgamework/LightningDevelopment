@@ -21,7 +21,7 @@ namespace Modules.Git
         public void Initialize(LightningDevelopmentHandle handle)
         {
             CorePlugin.WorkingDirectory.Changed += updateGitBasedir;
-
+            // TODO: detect and log git repository locations
         }
 
         private void updateGitBasedir(ContextualValue<string> arg1, string arg2)

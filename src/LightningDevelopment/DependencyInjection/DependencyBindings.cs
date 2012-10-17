@@ -17,24 +17,24 @@ namespace MHGameWork.TheWizards.DependencyInjection
         /// T should be an interface
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        public void SetBinding<T>(T instance) where T : class
+        public void SetBinding(Type t, object instance) 
         {
-            bindings[typeof(T)] = instance;
+            bindings[t] = instance;
         }
 
-        public T GetBinding<T>() where T : class
+        public object GetBinding(Type t) 
         {
-            if (!bindings.ContainsKey(typeof(T)))
-                executeDefaultBindingMethod(typeof (T));
+            if (!bindings.ContainsKey(t))
+                executeDefaultBindingMethod(t);
                 
 
-            if (!bindings.ContainsKey(typeof(T)))
+            if (!bindings.ContainsKey(t))
             {
-                Console.WriteLine("Interface: '{0}' is not bound to the DependencyBindings, and no default binding found.", typeof(T).FullName);
+                Console.WriteLine("Interface: '{0}' is not bound to the DependencyBindings, and no default binding found.", t.FullName);
                 return null;
             }
 
-            return bindings[typeof(T)] as T;
+            return bindings[t];
         }
 
         private void executeDefaultBindingMethod(Type interfaceType)

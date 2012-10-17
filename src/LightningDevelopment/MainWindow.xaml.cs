@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MHGameWork;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using KeyEventHandler = System.Windows.Input.KeyEventHandler;
 using MessageBox = System.Windows.MessageBox;
@@ -115,9 +116,9 @@ namespace LightningDevelopment
         private static extern bool
         SetForegroundWindow(IntPtr hWnd);
 
-       
 
-     
+
+
 
 
 
@@ -149,6 +150,7 @@ namespace LightningDevelopment
             {
                 IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginType);
                 plugin.Initialize(handle);
+                DI.CurrentBindings.SetBinding(pluginType, plugin);
             }
 
             foreach (var type in actionTypes)
