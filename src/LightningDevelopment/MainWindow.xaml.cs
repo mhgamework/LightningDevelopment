@@ -101,7 +101,11 @@ namespace LightningDevelopment
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
+            {
+                textBox1.Text = "";
                 Hide();
+                
+            }
         }
 
         private HotkeyBinder hotkeyBinder;
