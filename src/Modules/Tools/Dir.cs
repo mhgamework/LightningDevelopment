@@ -9,7 +9,7 @@ namespace Tools.Tools
     {
         public void Execute()
         {
-            CSRunner.RunExecutable("explorer.exe", Config.TheWizardsRoot);
+            CSRunner.RunExecutable("explorer.exe", Config.Get.TheWizardsRoot);
         }
     }
 }

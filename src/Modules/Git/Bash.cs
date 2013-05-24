@@ -40,7 +40,7 @@ namespace Tools.Tools
             p = Process.Start(new ProcessStartInfo
             {
                 FileName = "cmd",
-                Arguments = "/c \"\"" + Config.GitSh + "\" --login -i\"",
+                Arguments = "/c \"\"" + Config.Get.GitSh + "\" --login -i\"",
                 WorkingDirectory = gitRoot,
                 CreateNoWindow = false,
                 UseShellExecute = false,

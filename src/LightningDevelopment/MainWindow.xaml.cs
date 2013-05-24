@@ -104,7 +104,7 @@ namespace LightningDevelopment
             {
                 textBox1.Text = "";
                 Hide();
-                
+
             }
         }
 
@@ -135,7 +135,12 @@ namespace LightningDevelopment
             var txt = textBox1.Text;
             if (!actions.ContainsKey(txt))
                 return;
-            actions[txt].Execute();
+            try
+            {
+                actions[txt].Execute();
+            }
+            catch (Exception ex) { Console.WriteLine(ex); }
+
             textBox1.Text = "";
         }
 

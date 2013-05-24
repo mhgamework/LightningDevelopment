@@ -53,6 +53,8 @@
     <Compile Include="Core\CorePlugin.cs" />
     <Compile Include="Core\FullFileSystemWatcher.cs" />
     <Compile Include="CSRunner.cs" />
+    <Compile Include="Git\Push.cs" />
+    <Compile Include="Git\Fetch.cs" />
     <Compile Include="Git\GitPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestQuickAction.cs" />

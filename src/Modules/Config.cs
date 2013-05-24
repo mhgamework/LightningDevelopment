@@ -3,18 +3,45 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace Tools
 {
-    public static class Config
+    public class Config
     {
-        public static string TheWizardsRoot
-        {get { return Directory.GetParent(Environment.CurrentDirectory).FullName; }}
+        private static Config instance;
 
-        public static string TortoiseProc
-        {get { return @"C:\Program Files\TortoiseGit\bin\TortoiseProc.exe"; }}
+        static Config()
+        {
+            var s = new XmlSerializer(typeof(Config));
 
-        public static string GitSh
-        { get { return @"C:\Program Files (x86)\Git\bin\sh.exe"; } }
+            instance = new Config();
+
+            var file = "config.xml";
+            if (File.Exists(file))
+                using (var fs = File.OpenRead("config.xml"))
+                    instance = (Config)s.Deserialize(fs);
+
+            using (var fs = File.OpenWrite(file))
+                s.Serialize(fs, instance);
+
+
+        }
+
+        private Config()
+        {
+            TheWizardsRoot = Directory.GetParent(Environment.CurrentDirectory).FullName;
+            TortoiseProc = @"C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe";
+            GitSh = @"C:\Program Files (x86)\Git\bin\sh.exe";
+        }
+
+
+        public string TheWizardsRoot { get; set; }
+
+        public string TortoiseProc { get; set; }
+
+        public string GitSh { get; set; }
+
+        public static Config Get { get { return instance; } }
     }
 }
