@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
@@ -57,6 +58,7 @@ namespace Modules
                 // This means that the input com_obj
                 // does not support the IDispatch
                 // interface.
+                File.AppendAllText("log.txt", ex.ToString());
                 return null;
             }
 

@@ -41,6 +41,7 @@ namespace DocumentationHelper
                 }
                 catch (FtpException e)
                 {
+                    File.AppendAllText("log.txt", e.ToString());
                     Console.WriteLine(String.Format("FTP Error: {0} {1}", e.ErrorCode, e.Message));
                 }
 

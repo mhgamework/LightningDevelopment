@@ -34,9 +34,9 @@ namespace Modules.WindowsExplorer
                                        {
                                            fetchExplorerInfo();
                                        }
-                                       catch (Exception)
+                                       catch (Exception ex)
                                        {
-
+                                           File.AppendAllText("log.txt", ex.ToString());
                                        }
                                        Thread.Sleep(200);
                                    }

@@ -27,7 +27,7 @@ namespace Modules.Git
         private void updateGitBasedir(ContextualValue<string> arg1, string arg2)
         {
             var dir = new DirectoryInfo(arg1.Get());
-            while (dir.Parent != dir)
+            while (dir != null)
             {
                 if (Directory.Exists(dir.FullName + "\\.git"))
                 {

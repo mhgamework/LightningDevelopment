@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -63,7 +64,7 @@ namespace LightningDevelopment
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                File.AppendAllText("log.txt",ex.ToString());
                 throw;
             }
 
@@ -139,7 +140,11 @@ namespace LightningDevelopment
             {
                 actions[txt].Execute();
             }
-            catch (Exception ex) { Console.WriteLine(ex); }
+            catch (Exception ex)
+            {
+                File.AppendAllText("log.txt", ex.ToString());
+                Console.WriteLine(ex);
+            }
 
             textBox1.Text = "";
         }
