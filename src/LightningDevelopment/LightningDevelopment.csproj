@@ -69,10 +69,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Configuration.cs" />
     <Compile Include="DependencyInjection\DefaultBindingMethodAttribute.cs" />
     <Compile Include="DependencyInjection\DependencyBindings.cs" />
     <Compile Include="DependencyInjection\DI.cs" />
     <Compile Include="HotkeyBinder.cs" />
+    <Compile Include="ActionsModule.cs" />
     <Compile Include="IPlugin.cs" />
     <Compile Include="IQuickAction.cs" />
     <Compile Include="LightningDevelopmentHandle.cs" />

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Xml.Serialization;
+using LightningDevelopment;
 
 namespace Tools
 {
@@ -13,22 +14,12 @@ namespace Tools
 
         static Config()
         {
-            var s = new XmlSerializer(typeof(Config));
-
-            instance = new Config();
-
-            var file = "config.xml";
-            if (File.Exists(file))
-                using (var fs = File.OpenRead("config.xml"))
-                    instance = (Config)s.Deserialize(fs);
-
-            using (var fs = File.OpenWrite(file))
-                s.Serialize(fs, instance);
-
-
+            instance = Configuration.LoadConfigurationFile<Config>("ModulesConfig.xml");
         }
 
-        private Config()
+       
+
+        public Config()
         {
             TheWizardsRoot = Directory.GetParent(Environment.CurrentDirectory).FullName;
             TortoiseProc = @"C:\Program Files\TortoiseGit\bin\TortoiseGitProc.exe";

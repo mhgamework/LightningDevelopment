@@ -30,6 +30,8 @@ namespace LightningDevelopment
     public partial class MainWindow : Window
     {
 
+        private HotkeyBinder hotkeyBinder;
+        private ActionsModule actionsModule;
 
         public MainWindow()
         {
@@ -38,78 +40,117 @@ namespace LightningDevelopment
 
             textBox1.KeyDown += new KeyEventHandler(textBox1_KeyDown);
 
+
             Loaded += new RoutedEventHandler(MainWindow_Loaded);
+            KeyDown += new KeyEventHandler(MainWindow_KeyDown);
+            Deactivated += new EventHandler(MainWindow_Deactivated);
+
+
             WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen;
             this.WindowStyle = System.Windows.WindowStyle.None;
-
-            this.KeyDown += new KeyEventHandler(MainWindow_KeyDown);
             ShowInTaskbar = false;
             Topmost = true;
-
-            Deactivated += new EventHandler(MainWindow_Deactivated);
             ResizeMode = System.Windows.ResizeMode.NoResize;
+
+            executeSafe(() =>
+                {
+                    //actionsModule = ActionsModule.CreateFromProject("..\\src\\Modules\\Modules.csproj", AppDomain.CurrentDomain.BaseDirectory + "\\Modules.dll");
+                    actionsModule = ActionsModule.CreateFromDll(Configuration.Get.ModulesDllPath);
+                });
+            
 
 
 
         }
 
-
-
-        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void setupGlobalHotkey()
         {
-            try
-            {
-                buildModules();
-
-            }
-            catch (Exception ex)
-            {
-                File.AppendAllText("log.txt",ex.ToString());
-                throw;
-            }
-
-
-
-            //actions["test"].Execute();
-
-
-            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
-            source.AddHook(WndProc);
-
-
             hotkeyBinder = new HotkeyBinder(new WindowInteropHelper(this).Handle);
             hotkeyBinder.unSetHotKey();
             hotkeyBinder.setHotKey(HotkeyBinder.KeyModifiers.Control | HotkeyBinder.KeyModifiers.Shift, Keys.G);
-            hotkeyBinder.HotkeyFired += delegate
-                                        {
-                                            SetForegroundWindow(new WindowInteropHelper(this).Handle);
-                                            Show();
-                                            textBox1.Focus();
-                                        };
-
-            Hide();
-
-
-
+            hotkeyBinder.HotkeyFired += onGlobalHotkeyPressed;
         }
 
-        private
 
+        /// <summary>
+        /// Executes a piece of code safely so that exceptions are handled and displayed in the UI
+        /// </summary>
+        /// <param name="action"></param>
+        private void executeSafe(Action action)
+        {
+            try
+            {
+                action();
+                hideUIError();
+            }
+            catch (Exception ex)
+            {
+                File.AppendAllText("log.txt", ex.ToString());
+                showUIError(ex);
+                throw;
+            }
+        }
+
+        private void showUIError(Exception exception)
+        {
+            textBox1.Background = new SolidColorBrush(Color.FromRgb(255, 100, 100));
+        }
+
+        private void hideUIError()
+        {
+            textBox1.Background = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+        }
+
+        void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            HwndSource source = PresentationSource.FromVisual(this) as HwndSource;
+            source.AddHook(WndProc);
+
+            setupGlobalHotkey();
+
+            hidePopupWindow();
+
+        }
         void MainWindow_Deactivated(object sender, EventArgs e)
         {
-            Hide();
+            hidePopupWindow();
         }
         void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
-            {
-                textBox1.Text = "";
-                Hide();
+                hidePopupWindow();
+        }
+        void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+                return;
+            if (actionsModule == null) return;
+            var txt = textBox1.Text;
 
-            }
+            if (!actionsModule.ContainsAction(txt))
+                return;
+
+            executeSafe(() => actionsModule.RunAction(txt));
+
+            textBox1.Text = "";
+        }
+        private void onGlobalHotkeyPressed()
+        {
+            SetForegroundWindow(new WindowInteropHelper(this).Handle);
+            Show();
+            textBox1.Focus();
         }
 
-        private HotkeyBinder hotkeyBinder;
+        private void hidePopupWindow()
+        {
+            textBox1.Text = "";
+            Hide();
+        }
+
+
+
+
+        #region Windows P/Invoke
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
@@ -119,7 +160,9 @@ namespace LightningDevelopment
 
         [DllImport("user32.dll")]
         private static extern bool
-        SetForegroundWindow(IntPtr hWnd);
+            SetForegroundWindow(IntPtr hWnd);
+
+        #endregion
 
 
 
@@ -127,62 +170,9 @@ namespace LightningDevelopment
 
 
 
-        private Dictionary<string, IQuickAction> actions = new Dictionary<string, IQuickAction>();
-
-        void textBox1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key != Key.Enter)
-                return;
-            var txt = textBox1.Text;
-            if (!actions.ContainsKey(txt))
-                return;
-            try
-            {
-                actions[txt].Execute();
-            }
-            catch (Exception ex)
-            {
-                File.AppendAllText("log.txt", ex.ToString());
-                Console.WriteLine(ex);
-            }
-
-            textBox1.Text = "";
-        }
-
-        private void buildModules()
-        {
-            var engine = new Microsoft.Build.Evaluation.Project("..\\src\\Modules\\Modules.csproj");
-            engine.Build();
-
-            var modulesAssembly = Assembly.LoadFile(AppDomain.CurrentDomain.BaseDirectory + "\\Modules.dll");
-
-            var actionTypes = listQuickActions(modulesAssembly);
-
-            var handle = new LightningDevelopmentHandle();
-
-            foreach (var pluginType in listPlugins(modulesAssembly))
-            {
-                IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginType);
-                plugin.Initialize(handle);
-                DI.CurrentBindings.SetBinding(pluginType, plugin);
-            }
-
-            foreach (var type in actionTypes)
-            {
-                var obj = (IQuickAction)Activator.CreateInstance(type);
-                actions.Add(obj.Command, obj);
-            }
 
 
-        }
 
-        private IEnumerable<Type> listQuickActions(Assembly ass)
-        {
-            return ass.GetTypes().Where(t => t.GetInterfaces().Where(i => i == typeof(IQuickAction)).Count() != 0);
-        }
-        private IEnumerable<Type> listPlugins(Assembly ass)
-        {
-            return ass.GetTypes().Where(t => t.GetInterfaces().Where(i => i == typeof(IPlugin)).Count() != 0);
-        }
+
     }
 }

@@ -24,6 +24,7 @@ namespace Modules.ContextModel
         {
             lock (this)
             {
+                //TODO: check for actual change?
                 var old = value;
                 value = setValue;
                 if (Changed != null)
