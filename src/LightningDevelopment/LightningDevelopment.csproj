@@ -39,6 +39,9 @@
   <PropertyGroup>
     <StartupObject>LightningDevelopment.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Lightning.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
     <Reference Include="System" />
@@ -113,6 +116,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DependencyInjection\_doc.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Lightning.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
