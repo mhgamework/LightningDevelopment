@@ -28,7 +28,7 @@ namespace Modules.WinAPI
         //      __out  LPDWORD lpdwProcessId
         //  );
         [DllImport("user32.dll")]
-        private static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         //HANDLE WINAPI OpenProcess(
         //  __in  DWORD dwDesiredAccess,
