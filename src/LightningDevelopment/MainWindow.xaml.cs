@@ -31,7 +31,7 @@ namespace LightningDevelopment
     {
 
         private HotkeyBinder hotkeyBinder;
-        private ActionsModule actionsModule;
+        private CompositeActionsModule actionsModule;
 
         public MainWindow()
         {
@@ -55,7 +55,9 @@ namespace LightningDevelopment
             executeSafe(() =>
                 {
                     //actionsModule = ActionsModule.CreateFromProject("..\\src\\Modules\\Modules.csproj", AppDomain.CurrentDomain.BaseDirectory + "\\Modules.dll");
-                    actionsModule = ActionsModule.CreateFromDll(Configuration.Get.ModulesDllPath);
+                    actionsModule = new CompositeActionsModule();
+                    var lightningDevelopmentHandle = new LightningDevelopmentHandle(actionsModule);
+                    actionsModule.Submodules.Add(ActionsModule.CreateFromDll(Configuration.Get.ModulesDllPath, lightningDevelopmentHandle));
                 });
             
 

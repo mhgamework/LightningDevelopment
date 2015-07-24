@@ -6,21 +6,27 @@ using MHGameWork;
 
 namespace LightningDevelopment
 {
-    public class ActionsModule
+    public class ActionsModule : IActionsModule
     {
         private Dictionary<string, IQuickAction> actions = new Dictionary<string, IQuickAction>();
+        private LightningDevelopmentHandle handle;
+
+        public ActionsModule(LightningDevelopmentHandle lightningDevelopmentHandle)
+        {
+            handle = lightningDevelopmentHandle;
+        }
 
 
-        public static ActionsModule CreateFromProject(string projectFile, string outputFile)
+        public static ActionsModule CreateFromProject(string projectFile, string outputFile, LightningDevelopmentHandle lightningDevelopmentHandle)
         {
             var engine = new Microsoft.Build.Evaluation.Project(projectFile);
             engine.Build();
 
-            return CreateFromDll(outputFile);
+            return CreateFromDll(outputFile, lightningDevelopmentHandle);
         }
-        public static ActionsModule CreateFromDll(string dll)
+        public static ActionsModule CreateFromDll(string dll, LightningDevelopmentHandle lightningDevelopmentHandle)
         {
-            var ret = new ActionsModule();
+            var ret = new ActionsModule(lightningDevelopmentHandle);
             ret.loadAssembly(Assembly.LoadFrom(dll));
             return ret;
         }
@@ -28,8 +34,6 @@ namespace LightningDevelopment
         private void loadAssembly(Assembly modulesAssembly)
         {
             var actionTypes = listQuickActions(modulesAssembly);
-
-            var handle = new LightningDevelopmentHandle();
 
             foreach (var pluginType in listPlugins(modulesAssembly))
             {
