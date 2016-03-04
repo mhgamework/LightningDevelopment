@@ -56,7 +56,12 @@
   <ItemGroup>
     <Compile Include="Alfresco\OpenAlfrescoLocation.cs" />
     <Compile Include="Alfresco\OpenFredLocation.cs" />
+    <Compile Include="Chrome\gmail.cs" />
     <Compile Include="Chrome\JiraTicket.cs" />
+    <Compile Include="Chrome\Kanban.cs" />
+    <Compile Include="Chrome\PullRequests.cs" />
+    <Compile Include="Chrome\SprintBoard.cs" />
+    <Compile Include="Chrome\TimeLog.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ContextModel\ContextualValue.cs" />
     <Compile Include="Core\CorePlugin.cs" />
