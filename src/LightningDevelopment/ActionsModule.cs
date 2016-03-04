@@ -67,10 +67,5 @@ namespace LightningDevelopment
         {
             actions[action].Execute(arguments);
         }
-
-        public void RunAction(string txt)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
