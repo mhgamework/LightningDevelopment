@@ -11,7 +11,7 @@ namespace Modules.TWSourceToDokuWiki
             get { return "tw push docs"; }
         }
 
-        public void Execute()
+        public void Execute(string[] arguments)
         {
             var uploader = new DocUploader();
             uploader.UploadDocs();

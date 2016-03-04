@@ -127,12 +127,14 @@ namespace LightningDevelopment
             if (e.Key != Key.Enter)
                 return;
             if (actionsModule == null) return;
-            var txt = textBox1.Text;
-
-            if (!actionsModule.ContainsAction(txt))
+            var command       = textBox1.Text.Split(' ');
+            if (command.Length == 0)
+                return;
+            var action = command[0];
+            if (!actionsModule.ContainsAction(action))
                 return;
 
-            executeSafe(() => actionsModule.RunAction(txt));
+            executeSafe(() => actionsModule.RunAction(action, command.Skip(1).ToArray()));
 
             textBox1.Text = "";
         }

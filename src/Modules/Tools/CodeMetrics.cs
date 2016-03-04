@@ -15,7 +15,7 @@ namespace Tools.Tools
             get { return "codemetrics"; }
         }
 
-        public void Execute()
+        public void Execute(string[] arguments)
         {
             var lineCount = 0;
             var fileCount = 0;

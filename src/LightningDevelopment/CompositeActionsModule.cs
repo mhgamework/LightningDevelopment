@@ -21,13 +21,13 @@ namespace LightningDevelopment
             return false;
         }
 
-        public void RunAction(string txt)
+        public void RunAction(string txt,string[] arguments )
         {
             foreach (var module in Submodules)
             {
                 if (!module.ContainsAction(txt))
                     continue;
-                module.RunAction(txt);
+                module.RunAction(txt,arguments);
                 return;
 
             }

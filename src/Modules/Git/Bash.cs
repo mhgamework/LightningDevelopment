@@ -16,7 +16,7 @@ namespace Tools.Tools
             get { return "bash"; }
         }
 
-        public void Execute()
+        public void Execute(string[] arguments)
         {
             var gitRoot = GitPlugin.GitRoot.Get();
             if (gitRoot == null) return;

@@ -63,9 +63,14 @@ namespace LightningDevelopment
             return actions.ContainsKey(txt);
         }
 
+        public void RunAction(string action, string[] arguments)
+        {
+            actions[action].Execute(arguments);
+        }
+
         public void RunAction(string txt)
         {
-            actions[txt].Execute();
+            throw new NotImplementedException();
         }
     }
 }

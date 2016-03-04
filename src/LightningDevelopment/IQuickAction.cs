@@ -11,6 +11,6 @@ namespace LightningDevelopment
     public interface IQuickAction
     {
         string Command { get; }
-        void Execute();
+        void Execute(string[] arguments);
     }
 }

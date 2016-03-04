@@ -16,7 +16,7 @@ namespace Modules.TWSourceToDokuWiki
             get { return "test"; }
         }
 
-        public void Execute()
+        public void Execute(string[] arguments)
         {
 
            

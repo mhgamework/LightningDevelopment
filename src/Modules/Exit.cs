@@ -14,7 +14,7 @@ namespace Tools.Tools
             get { return "exit"; }
         }
 
-        public void Execute()
+        public void Execute(string[] arguments)
         {
             Environment.Exit(0);
         }
