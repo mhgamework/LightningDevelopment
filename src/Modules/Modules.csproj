@@ -54,6 +54,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alfresco\OpenAlfrescoLocation.cs" />
+    <Compile Include="Alfresco\OpenFredLocation.cs" />
+    <Compile Include="Chrome\JiraTicket.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ContextModel\ContextualValue.cs" />
     <Compile Include="Core\CorePlugin.cs" />
