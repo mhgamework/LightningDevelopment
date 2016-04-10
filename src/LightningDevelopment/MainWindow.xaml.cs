@@ -56,7 +56,7 @@ namespace LightningDevelopment
                 {
                     //actionsModule = ActionsModule.CreateFromProject("..\\src\\Modules\\Modules.csproj", AppDomain.CurrentDomain.BaseDirectory + "\\Modules.dll");
                     actionsModule = new CompositeActionsModule();
-                    var lightningDevelopmentHandle = new LightningDevelopmentHandle(actionsModule);
+                    var lightningDevelopmentHandle = new LightningDevelopmentHandle(/*actionsModule*/);
                     actionsModule.Submodules.Add(ActionsModule.CreateFromDll(Configuration.Get.ModulesDllPath, lightningDevelopmentHandle));
                 });
             

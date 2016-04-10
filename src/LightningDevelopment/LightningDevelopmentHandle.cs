@@ -18,15 +18,16 @@ namespace LightningDevelopment
         public IActionsModule LoadActionsModule()
         {
             //TODO: forward provided handles from submodules or simplify design
-
-            var ret = ActionsModule.CreateFromDll(Configuration.Get.ModulesDllPath, this);
+            throw new NotImplementedException();
+            /*var ret = ActionsModule.CreateFromDll(Configuration.Get.ModulesDllPath, this);
             actionsModule.Submodules.Add(ret);
-            return ret;
+            return ret;*/
         }
 
         public void UnloadActionsModule(IActionsModule mod)
         {
-            actionsModule.Submodules.Remove(mod);
+            throw new NotImplementedException();
+            //actionsModule.Submodules.Remove(mod);
         }
 
 
