@@ -24,7 +24,7 @@ namespace Modules.Chrome
             if (!Int32.TryParse(arguments[0], out ticketNumber))
                 return;
             Process cmd = new Process();
-            cmd.StartInfo.FileName = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe";
+            cmd.StartInfo.FileName = GMail.ChromeAddress;
             cmd.StartInfo.Arguments = "https://xenitsupport.jira.com/browse/XENFRED-" + ticketNumber;
             cmd.Start();
         }

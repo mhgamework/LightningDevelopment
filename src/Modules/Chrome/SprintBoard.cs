@@ -18,7 +18,7 @@ namespace Modules.Chrome
         public void Execute(string[] arguments)
         {
             Process cmd = new Process();
-            cmd.StartInfo.FileName = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe";
+            cmd.StartInfo.FileName = GMail.ChromeAddress;
             cmd.StartInfo.Arguments = @"https://xenitsupport.jira.com/secure/RapidBoard.jspa?rapidView=20&quickFilter=272";
             cmd.Start();
         }
